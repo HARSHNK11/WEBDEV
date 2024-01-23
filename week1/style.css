@@ -162,9 +162,7 @@
         box-shadow: 1em 1em 1em black;
         transition: 1s;
     }
-    .image:hover{
-        transform: scale(1.1);
-    }
+   
    
    
     
