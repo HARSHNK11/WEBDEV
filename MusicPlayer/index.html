@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/10912810c2.js" crossorigin="anonymous"></script>
+    <title>Music Player</title>
+</head>
+<body>
+    <div class="container">
+        <div class="music">
+            <nav>
+                <div class="circle">
+                    <i class="fa-solid fa-angle-left"></i>
+                </div>
+                <div class="circle">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+
+            </nav>
+            <a href="https://open.spotify.com/user/31f4zyuhihsylstor7kfijfrr3gq?si=9nHSoLIuQLe8P8F-8v5Veg">
+            <img src="spotify.jpg" alt="img" class="cover">
+        </a>
+            <h1>MUSIC</h1>
+            <p>nan istha</p>
+            <audio  id="song">
+                <source src="Imagine_Dragons_-_Whatever_It_Takes.mp3" type="audio/mpeg">
+            </audio>
+            <input type="range" value="0" id="progress">
+            <div class="controls">
+                <div><i class="fa-solid fa-backward-step"></i></div>
+                <div onclick="playpause()"><i class="fa-solid fa-play" id="ctrlicon"></i></div>
+                <div><i class="fa-solid fa-forward-step"></i></div>
+            </div>
+            <div class="time-display">
+                <span id="current-time">0:00</span> / 
+                <span id="total-time">0:00</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        let progressInterval;
+
+function playpause() {
+    if (song.paused) {
+        song.play();
+        ctrlicon.classList.remove("fa-play");
+        ctrlicon.classList.add("fa-pause");
+        
+        clearInterval(progressInterval);
+        progressInterval = setInterval(() => {
+            progress.value = song.currentTime;
+        }, 250);
+    } else {
+        song.pause();
+        ctrlicon.classList.remove("fa-pause");
+        ctrlicon.classList.add("fa-play");
+        clearInterval(progressInterval);
+    }
+}
+progress.addEventListener('input', function() {
+    song.currentTime = progress.value;
+});
+
+song.addEventListener('ended', function() {
+    clearInterval(progressInterval);
+    ctrlicon.classList.remove("fa-pause");
+    ctrlicon.classList.add("fa-play");
+});
+song.addEventListener('loadedmetadata', function() {
+    progress.max = song.duration;
+    document.getElementById('total-time').textContent = formatTime(song.duration);
+});
+
+song.addEventListener('timeupdate', function() {
+    document.getElementById('current-time').textContent = formatTime(song.currentTime);
+});
+
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+}
+    </script>
+</body>
+</html>
